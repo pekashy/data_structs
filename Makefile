@@ -2,7 +2,7 @@ CC:= gcc
 CFLAGS = -g -Wall# -g for debug, -O2 for optimise and -Wall additional messages
 SOURCES = structure.c
 OBJECTS = structure.o
-EXECUTABLE = a.out
+EXECUTABLE = a
 
 all: build
 build: $(OBJECTS) $(EXECUTABLE) clean

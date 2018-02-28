@@ -20,7 +20,7 @@ int main(){
     TREE* T=createBtree(3);
     printf("hello\n");
 	while(read(file, &c, 1)!=0){
-		if(c==' ' || c=='\n' || c=='-' && strlen(word)!=0){
+		if((c==' ' || c=='\n' || c=='-') && strlen(word)!=0){
 			addNode(T, word);
             printf("%s\n", word);
             memset(word, '\0', ((int) st.st_size)*sizeof(char));
