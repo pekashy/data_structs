@@ -20,6 +20,12 @@ typedef struct Tree{
 	NODE* root;
 } TREE;
 
+typedef struct Iterator{
+    NODE* (*next)();
+    NODE* current;
+    int isEnd;
+} ITERATOR;
+
 NODE * BTreeInsert(TREE *T, KEY* k);
 
 
@@ -136,6 +142,15 @@ TREE* createBtree(int t){
     T->root->n=0;
     return T;
 }
+
+ITERATOR createIterator(TREE* T, NODE* (*next)()){
+
+}
+
+NODE* next(){
+
+}
+
 
 //TODO: iterator
 //TODO: getMax
