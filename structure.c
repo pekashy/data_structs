@@ -28,6 +28,11 @@ int main(){
     while(!iterator->isLast){
         printf("key %d: n=%d\n", iterator->current->key->key, iterator->current->key->n);
         iterator->next(iterator);
-        // if
+    }
+    deleteNode(tree, getNode(tree,10));
+    iterator=createIterator(tree);
+    while(!iterator->isLast){
+        printf("key %d: n=%d\n", iterator->current->key->key, iterator->current->key->n);
+        iterator->next(iterator);
     }
 }

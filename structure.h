@@ -73,8 +73,9 @@ NODE* treeInsert(TREE* t, NODE* z){
             }
         }
         else {
-            if(z->key->key < x->key->key)
+            if(z->key->key < x->key->key){
                 break;
+            }
         }
         if(x->right) {
             if (z->key->key > x->key->key){
@@ -83,8 +84,9 @@ NODE* treeInsert(TREE* t, NODE* z){
             }
         }
         else {
-            if(z->key->key > x->key->key)
+            if(z->key->key > x->key->key){
                 break;
+            }
         }
         break; //the cell with key exists and we found it
     }
@@ -115,7 +117,6 @@ void freeNode(NODE* n){
     free(n);
 }
 
-
 NODE* treeMin(NODE* r){
     NODE* n=r;
     while(n->left)
@@ -130,6 +131,43 @@ NODE* treeMax(NODE* r){
     return n;
 }
 
+NODE* nextElement(NODE* x){
+    if(x->right)
+        return treeMin(x->right);
+    NODE* y=x->parent;
+    if(!y) return x; //x is root
+    while(y && x==y->right){
+        x=y;
+        y=y->parent;
+    }
+    return y;
+}
+
+void deleteNode(TREE* t, NODE* z){
+    NODE *x, *y;
+    if(!z->left || !z->right)
+        y=z;
+    else y=nextElement(z);
+    if(y->left)
+        x=y->left;
+    else
+        x=y->right;
+    if(x)
+        x->parent=y->parent; //connect yth children
+    if(!y->parent){
+        x=t->root;
+    }
+    else{
+        if(y==y->parent->left)
+            y->parent->left=x;
+        else
+            y->parent->right=x;
+    }
+    if(y!=z)
+        z->key=y->key;
+    freeNode(y);
+}
+
 I* createIterator(TREE* t){
     I* i=malloc(sizeof(I));
     i->t=t;
@@ -139,20 +177,32 @@ I* createIterator(TREE* t){
     return i;
 }
 
+NODE* getNode(TREE* t, int key){
+    NODE* n=t->root;
 
+    while(n->key->key!=key){
+        if(n->key->key > key) {
+            if(n->left){
+                n = n->left;
+            }
+            else{
+                return NULL;
+            }
+        }
+        else {
+            if(n->right){
+                n = n->right;
+            }
+            else{
+                return NULL;
+            }
+        }
+    }
+    return n;
+}
 
 void next(I* i){
     NODE* x=i->current;
-    if(x->right){
-        i->current=treeMin(x->right);
-        return;
-    }
-    NODE* y=x->parent;
-    if(!y) return; //x is root
-    while(y && x==y->right){
-        x=y;
-        y=y->parent;
-    }
+    i->current=(nextElement(i->current));
     if(!i->current) i->isLast=1;
-    i->current=y;
 }
