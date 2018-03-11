@@ -12,6 +12,7 @@ struct Node{
     NODE* left;
     NODE* right;
     int inList; //must be 1 or isNil
+    int isLeaf;
 };
 
 typedef struct Tree{
@@ -26,13 +27,16 @@ NODE* createNode();
 TREE* createTree(){
     TREE *t=malloc(sizeof(TREE));
     t->root=createNode();
-    t->root->inList=1;
+    t->root->inList=0;
     return t;
 }
 
 NODE* createNode(){
     NODE* n=malloc(sizeof(NODE));
     n->inList=0;
+    n->isLeaf=1;
+    n->left=NULL;
+    n->right=NULL;
     return n;
 }
 
@@ -45,36 +49,54 @@ NODE* addNode(TREE* t, int k){
 }
 
 NODE* treeInsert(TREE* t, NODE* z){
-    NODE* y=createNode();
+    //NODE* y=createNode();
     NODE* x=t->root;
-    while(x->inList){
-        y=x;
-        if(z->key->key<x->key->key)
-            x=x->left;
-        if(z->key->key==x->key->key){
-            x->key->n=x->key->n+1;
-            freeNode(z);
-            return x;
+   // NODE* y=x;
+    while(!x->isLeaf){
+       // y=x;
+        if(x->left) {
+            if (z->key->key < x->key->key){
+                x = x->left;
+                continue;
+            }
         }
-        if(z->key->key>x->key->key)
-            x=x->right;
+        else {
+            if(z->key->key<x->key->key)
+                break;
+        }
+        if(x->right) {
+            if (z->key->key > x->key->key){
+                x = x->right;
+                continue;
+            }
+        }
+        else {
+            if(z->key->key>x->key->key)
+                break;
+        }
     }
+    //y=x;
+    //x=createNode();
     //p[z]=y ???
-    if(!y->inList){
+    if(!x->inList){
         t->root=z;
-        freeNode(y);
+        z->inList=1;
+        freeNode(x);
     }
     else{
-        if(z->key->key<y->key->key)
-            y->left=z;
+        x->isLeaf=0;
+        z->inList=1;
+        if(z->key->key<x->key->key)
+            x->left=z;
         if(z->key->key==x->key->key){
             x->key->n=x->key->n+1;
             freeNode(z);
             return x;
         }
         if(z->key->key>x->key->key)
-            y->right=z;
+            x->right=z;
     }
+
     return z;
 }
 

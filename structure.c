@@ -24,4 +24,5 @@ int main(){
     for(int i=0; i<10; i++){
         addNode(tree, rand() % (100 + 1 - 1) + 1);
     }
+
 }
