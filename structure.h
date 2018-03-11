@@ -11,7 +11,7 @@ struct Node{
     KEY* key;
     NODE* left;
     NODE* right;
-    int inList; //must be 1 or isNil
+    int inList;
     int isLeaf;
 };
 
@@ -49,11 +49,8 @@ NODE* addNode(TREE* t, int k){
 }
 
 NODE* treeInsert(TREE* t, NODE* z){
-    //NODE* y=createNode();
     NODE* x=t->root;
-   // NODE* y=x;
     while(!x->isLeaf){
-       // y=x;
         if(x->left) {
             if (z->key->key < x->key->key){
                 x = x->left;
@@ -74,10 +71,8 @@ NODE* treeInsert(TREE* t, NODE* z){
             if(z->key->key>x->key->key)
                 break;
         }
+        break; //the cell with key exists and we found it
     }
-    //y=x;
-    //x=createNode();
-    //p[z]=y ???
     if(!x->inList){
         t->root=z;
         z->inList=1;

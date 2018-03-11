@@ -21,8 +21,8 @@ int main(){
     //printf("hello %d\n", sizeof(TREE));
     TREE* tree=createTree();
     srand(time(NULL));//temporary
-    for(int i=0; i<10; i++){
-        addNode(tree, rand() % (100 + 1 - 1) + 1);
+    for(int i=0; i<100; i++){
+        addNode(tree, rand() % (10 + 1 - 1) + 1);
     }
 
 }
