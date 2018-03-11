@@ -23,13 +23,15 @@ typedef struct Tree{
 typedef struct Iterator{
     TREE* t;
     NODE* current;
-    NODE* last;
+    void (*next)(struct Iterator *);
+    int isLast;
 } I;
 
 void freeNode(NODE* n);
 NODE* treeInsert(TREE* t, NODE* z);
 KEY* createKey(int k);
 NODE* createNode();
+void next(I* i);
 
 TREE* createTree(){
     TREE *t=malloc(sizeof(TREE));
@@ -71,7 +73,7 @@ NODE* treeInsert(TREE* t, NODE* z){
             }
         }
         else {
-            if(z->key->key<x->key->key)
+            if(z->key->key < x->key->key)
                 break;
         }
         if(x->right) {
@@ -81,7 +83,7 @@ NODE* treeInsert(TREE* t, NODE* z){
             }
         }
         else {
-            if(z->key->key>x->key->key)
+            if(z->key->key > x->key->key)
                 break;
         }
         break; //the cell with key exists and we found it
@@ -95,9 +97,9 @@ NODE* treeInsert(TREE* t, NODE* z){
         x->isLeaf=0;
         z->inList=1;
         z->parent=x;
-        if(z->key->key<x->key->key)
+        if(z->key->key < x->key->key)
             x->left=z;
-        if(z->key->key==x->key->key){
+        if(z->key->key == x->key->key){
             x->key->n=x->key->n+1;
             freeNode(z);
             return x;
@@ -114,11 +116,43 @@ void freeNode(NODE* n){
 }
 
 
-
-I* createIterator(TREE* t){
-
+NODE* treeMin(NODE* r){
+    NODE* n=r;
+    while(n->left)
+        n=n->left;
+    return n;
 }
 
-NODE* next(I* i){
+NODE* treeMax(NODE* r){
+    NODE* n=r;
+    while(n->right)
+        n=n->right;
+    return n;
+}
 
+I* createIterator(TREE* t){
+    I* i=malloc(sizeof(I));
+    i->t=t;
+    i->current=treeMin(t->root);
+    i->next=&next;
+    i->isLast=0;
+    return i;
+}
+
+
+
+void next(I* i){
+    NODE* x=i->current;
+    if(x->right){
+        i->current=treeMin(x->right);
+        return;
+    }
+    NODE* y=x->parent;
+    if(!y) return; //x is root
+    while(y && x==y->right){
+        x=y;
+        y=y->parent;
+    }
+    if(!i->current) i->isLast=1;
+    i->current=y;
 }
