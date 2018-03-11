@@ -9,6 +9,7 @@ typedef struct Key{
 
 struct Node{
     KEY* key;
+    NODE* parent;
     NODE* left;
     NODE* right;
     int inList;
@@ -19,6 +20,12 @@ typedef struct Tree{
     NODE* root;
 } TREE;
 
+typedef struct Iterator{
+    TREE* t;
+    NODE* current;
+    NODE* last;
+} I;
+
 void freeNode(NODE* n);
 NODE* treeInsert(TREE* t, NODE* z);
 KEY* createKey(int k);
@@ -27,7 +34,7 @@ NODE* createNode();
 TREE* createTree(){
     TREE *t=malloc(sizeof(TREE));
     t->root=createNode();
-    t->root->inList=0;
+    t->root->parent=NULL;
     return t;
 }
 
@@ -40,6 +47,12 @@ NODE* createNode(){
     return n;
 }
 
+KEY* createKey(int k){
+    KEY* key=malloc(sizeof(KEY));
+    key->n=1;
+    key->key=k;
+    return key;
+}
 
 NODE* addNode(TREE* t, int k){
     NODE* n=createNode();
@@ -81,6 +94,7 @@ NODE* treeInsert(TREE* t, NODE* z){
     else{
         x->isLeaf=0;
         z->inList=1;
+        z->parent=x;
         if(z->key->key<x->key->key)
             x->left=z;
         if(z->key->key==x->key->key){
@@ -91,7 +105,6 @@ NODE* treeInsert(TREE* t, NODE* z){
         if(z->key->key>x->key->key)
             x->right=z;
     }
-
     return z;
 }
 
@@ -100,9 +113,12 @@ void freeNode(NODE* n){
     free(n);
 }
 
-KEY* createKey(int k){
-    KEY* key=malloc(sizeof(KEY));
-    key->n=1;
-    key->key=k;
-    return key;
+
+
+I* createIterator(TREE* t){
+
+}
+
+NODE* next(I* i){
+
 }
