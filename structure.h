@@ -139,7 +139,7 @@ NODE* nextElement(NODE* x){
     if(x->right)
         return treeMin(x->right);
     NODE* y=x->parent;
-    if(!y) return x; //x is root
+    //if(!y) y=x; //x is root
     while(y && y->right && x==y->right){
         x=y;
         y=y->parent;
