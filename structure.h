@@ -42,10 +42,14 @@ TREE* createTree(){
 
 NODE* createNode(){
     NODE* n=malloc(sizeof(NODE));
+    //n=NULL;
+    //*n={.key=NULL, .inList=0, .isLeaf=1, .left=NULL, .right=NULL, .parent=NULL};
     n->inList=0;
     n->isLeaf=1;
     n->left=NULL;
     n->right=NULL;
+    n->key=NULL;
+    n->parent=NULL;
     return n;
 }
 
@@ -136,7 +140,7 @@ NODE* nextElement(NODE* x){
         return treeMin(x->right);
     NODE* y=x->parent;
     if(!y) return x; //x is root
-    while(y && x==y->right){
+    while(y && y->right && x==y->right){
         x=y;
         y=y->parent;
     }
