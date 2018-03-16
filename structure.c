@@ -44,6 +44,7 @@ NODE* treeMax(NODE* r){
 
 NODE* createNode(){
     NODE* n=malloc(sizeof(NODE));
+    if(!n) return NULL;
     n->inList=0;
     n->isLeaf=1;
     n->left=NULL;
@@ -55,7 +56,9 @@ NODE* createNode(){
 
 TREE* createTree(){
     TREE *t=malloc(sizeof(TREE));
+    if(!t) return NULL;
     t->root=createNode();
+    if(!t->root) return NULL; //not enough memory
     t->root->parent=NULL;
     return t;
 }
@@ -111,6 +114,7 @@ NODE* treeInsert(TREE* t, NODE* z){
 
 KEY* createKey(int k){
     KEY* key=malloc(sizeof(KEY));
+    if(!key) return NULL;
     key->n=1;
     key->key=k;
     return key;
@@ -118,7 +122,9 @@ KEY* createKey(int k){
 
 NODE* addNode(TREE* t, int k){
     NODE* n=createNode();
+    if(!n) return NULL;
     KEY* key =createKey(k);
+    if(!key) return NULL;
     n->key=key;
     return treeInsert(t, n);
 }
@@ -141,6 +147,7 @@ void next(I* i){
 
 I* createIterator(TREE* t){
     I* i=malloc(sizeof(I));
+    if(!i) return NULL;
     i->t=t;
     i->current=treeMin(t->root);
     i->next=&next;
