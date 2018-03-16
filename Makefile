@@ -1,18 +1,24 @@
 CC:= gcc
-CFLAGS = -g -Wall# -g for debug, -O2 for optimise and -Wall additional messages
+CFLAGS = -g -fprofile-arcs -ftest-coverage -Wall# -g for debug, -O2 for optimise and -Wall additional messages
+LFLAGS = --coverage
 SOURCES = structure.c test.c
 OBJECTS = structure.o test.o
 EXECUTABLE = run
+.PHONY: clean
 
-all: $(SOURCES) $(EXECUTABLE) clean
+all: build link clean
+
+build: $(SOURCES)
+
+link: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) -o $@ $(OBJECTS)
+	$(CC) $(LFLAGS) -o $@ $(OBJECTS)
 
-.c.o:
+$(SOURCES):
 	$(CC) $(CFLAGS) -o $@ -c $< -MD
 
 clean:
-	rm -rf *.d
+	rm -rf *.d *.o
 
 -include *.d
