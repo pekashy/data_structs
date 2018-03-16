@@ -1,21 +1,18 @@
 CC:= gcc
 CFLAGS = -g -Wall# -g for debug, -O2 for optimise and -Wall additional messages
-SOURCES = structure.c
-OBJECTS = structure.o
-EXECUTABLE = a.out
+SOURCES = structure.c test.c
+OBJECTS = structure.o test.o
+EXECUTABLE = run
 
-all: build
-build: $(OBJECTS) $(EXECUTABLE) clean
-
-$(OBJECTS): $(SOURCES)
-	$(CC) $(CFLAGS) -c $< -o $@ -MD
-	-(include *.d)
+all: $(SOURCES) $(EXECUTABLE) clean
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) -o $@ $(OBJECTS)
 
-#$(EXECUTABLE): $(OBJECTS)
-#	$(CC) $(CFLAGS) $(OBJECTS) -o $@
+.c.o:
+	$(CC) $(CFLAGS) -o $@ -c $< -MD
 
 clean:
 	rm -rf *.d
+
+-include *.d
