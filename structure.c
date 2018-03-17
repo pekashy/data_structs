@@ -1,8 +1,17 @@
 #include "structure.h"
 
-void freeNode(NODE* n){
-    free(n->key);
-    free(n);
+void freeNode(NODE** n){
+    if(!(*n))
+        return;
+    (*n)->parent=NULL;
+    (*n)->left=NULL;
+    (*n)->right=NULL;
+    free((*n)->key);
+    (*n)->key=NULL;
+    free((*n));
+    (*n)=NULL;
+    //printf("%d", n->isLeaf);
+
 }
 
 NODE* getNode(TREE* t, int key){
@@ -45,7 +54,8 @@ NODE* treeMax(NODE* r){
 
 NODE* createNode(){
     NODE* n=malloc(sizeof(NODE));
-    if(!n) return NULL;
+    if(!n)
+        return NULL;
     n->inList=0;
     n->isLeaf=1;
     n->left=NULL;
@@ -96,7 +106,7 @@ NODE* treeInsert(TREE* t, NODE* z){
     if(!x->inList){
         t->root=z;
         z->inList=1;
-        freeNode(x);
+        freeNode(&x);
     }
     else{
         x->isLeaf=0;
@@ -106,7 +116,7 @@ NODE* treeInsert(TREE* t, NODE* z){
             x->left=z;
         if(z->key->key == x->key->key){
             x->key->n=x->key->n+1;
-            freeNode(z);
+            freeNode(&z);
             return x;
         }
         if(z->key->key>x->key->key)
@@ -165,7 +175,8 @@ I* createIterator(TREE* t){
 
 void deleteNode(TREE* t, NODE* z){
     NODE *x, *y;
-    if(!z) return;
+    if(!z)
+        return;
     if(!z->left || !z->right)
         y=z;
     else
@@ -187,6 +198,8 @@ void deleteNode(TREE* t, NODE* z){
     }
     if(y!=z)
         z->key=y->key;
-    freeNode(y);
+
+    freeNode(&y);
+
 }
 
