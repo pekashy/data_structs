@@ -1,0 +1,4 @@
+/home/pekashy/soft/clion-2017.2.3/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/home/pekashy/Dropbox/Учеба/2 курс/4 sem/lunev/data_structs"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/pekashy/Dropbox/Учеба/2 курс/4 sem/lunev/data_structs/cmake-build-debug

@@ -1,38 +1,60 @@
 #include "structure.h"
 
 int main() {
-    /* char filename[] = "source";
-     int file = open(filename, O_RDONLY);
-     printf("hello %d\n", file);
-     struct stat st;
-     stat(filename, &st);
-     printf("hello %d\n", st.st_size);
-     char *word = malloc(((int) st.st_size) * sizeof(char));
-     char *it = word;
-     char c;*/
-    //printf("hello %d\n", sizeof(TREE));
+    int a=1000;
+    int b=3;
+
     TREE *tree = createTree();
+    //TREE *tree2 = createTree();
+
+
     srand(time(NULL));//temporary
-    for (int i = 0; i < 10000; i++) {
-        if(!addNode(tree, rand() % (2000 + 1 - 1) + 1)) break;
-        printf("%d added\n", i);
+    for (int i = 0; i < a; i++) {
+        if(!addNode(tree, rand() % (b + 1 - 1) + 1))
+            return -1;
+     //   if(!addNode(tree2, i) )
+     //       return -1;
     }
+    for(int k=0; k<b; k++){
+        getNode(tree, k);
+      //  getNode(tree2, k);
+    }
+ //   deleteNode(tree, tree->root);
+    //deleteNode(tree2, tree2->root);
+
     I *iterator = createIterator(tree);
+   // I *iterator2 = createIterator(tree2);
+    NODE* del, *del2;
+    treeMax(tree->root);
+    treeMin(tree->root);
+   // treeMax(tree2->root);
+   // treeMin(tree2->root);
+
     while (!iterator->isLast) {
-        printf("key %d: n=%d; isLast=%d\n", iterator->current->key->key, iterator->current->key->n, iterator->isLast);
-        deleteNode(tree, iterator->current);
+        del=iterator->current;
         iterator->next(iterator);
-        printf("islast %d\n", iterator->isLast);
+        deleteNode(tree, del);
     }
-    //deleteNode(tree, getNode(tree, 10));
+    /*for(int k=1; k<b; k++){
+        //deleteNode(tree, getNode(tree,k));
+        //deleteNode(tree2, getNode(tree2,k));
+    }*/
+    /*while (!iterator->isLast) {
+        del=iterator->current;
+        iterator->next(iterator);
+        deleteNode(tree, del);
+    }*/
+ /*   while (!iterator2->isLast) {
+        del2=iterator2->current;
+        iterator2->next(iterator2);
+        deleteNode(tree2, del2);
+    }*/
     free(iterator);
-    iterator = createIterator(tree);
-    /* while (!iterator->isLast) {
-         iterator->next(iterator);
-         printf("key %d: n=%d; isLast=%d\n", iterator->current->key->key, iterator->current->key->n, iterator->isLast);
-         deleteNode(tree, iterator->current);
-     }*/
-    free(iterator);
-    //deleteNode(tree, tree->root);
+   // free(iterator2);
+
+    // iterator = createIterator(tree);
+   // free(iterator);
     free(tree);
+   // free(tree2);
+
 }
