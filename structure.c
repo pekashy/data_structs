@@ -1,11 +1,16 @@
+#include <memory.h>
 #include "structure.h"
 
 void freeNode(NODE** n){
-    if(!(*n))
-        return;
+    //if(!(*n))
+    //    return; //safe
     (*n)->parent=NULL;
     (*n)->left=NULL;
     (*n)->right=NULL;
+    if((*n)->key){
+        free((*n)->key->data);
+        (*n)->key->data=NULL;
+    }
     free((*n)->key);
     (*n)->key=NULL;
     free((*n));
@@ -40,6 +45,10 @@ NODE* getNode(TREE* t, int key){
 
 NODE* treeMin(NODE* r){
     NODE* n=r;
+    if(!n)
+        return NULL;
+    if(!n->key)
+        return n;
     while(n->left)
         n=n->left;
     return n;
@@ -47,6 +56,10 @@ NODE* treeMin(NODE* r){
 
 NODE* treeMax(NODE* r){
     NODE* n=r;
+    if(!n)
+        return NULL;
+    if(!n->key)
+        return n;
     while(n->right)
         n=n->right;
     return n;
@@ -131,6 +144,10 @@ KEY* createKey(int k){
         return NULL;
     key->n=1;
     key->key=k;
+    key->data=malloc(64000); //data
+    if(!key->data)
+        return NULL;
+    memset(key->data, '1', 64000);
     return key;
 }
 
@@ -146,6 +163,8 @@ NODE* addNode(TREE* t, int k){
 }
 
 NODE* nextElement(NODE* x){
+    if(!x)
+        return NULL;
     if(x->right)
         return treeMin(x->right);
     NODE* y=x->parent;
@@ -157,6 +176,8 @@ NODE* nextElement(NODE* x){
 }
 
 void next(I* i){
+    if(!i)
+        return;
     i->current=(nextElement(i->current));
     if(!i->current)
         i->isLast=1;
@@ -173,14 +194,21 @@ I* createIterator(TREE* t){
     return i;
 }
 
-void deleteNode(TREE* t, NODE* z){
+void deleteNode(TREE* t, NODE** z){
     NODE *x, *y;
     if(!z)
         return;
-    if(!z->left || !z->right)
-        y=z;
+    if(!(*z))
+        return;
+    if(!(*z)->left && !(*z)->right && !(*z)->parent){
+        freeNode(z);
+        *z=NULL;
+        return;
+    }
+    if(!(*z)->left || !(*z)->right)
+        y=*z;
     else
-        y=nextElement(z);
+        y=nextElement(*z);
     if(y->left)
         x=y->left;
     else
@@ -196,10 +224,8 @@ void deleteNode(TREE* t, NODE* z){
         else
             y->parent->right=x;
     }
-    if(y!=z)
-        z->key=y->key;
+    if(y!=*z)
+        (*z)->key=y->key;
 
     freeNode(&y);
-
 }
-

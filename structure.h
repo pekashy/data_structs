@@ -7,6 +7,7 @@ typedef struct Node NODE;
 
 typedef struct Key{
     int key;
+    char* data;
     int n;
 } KEY;
 
@@ -36,4 +37,4 @@ I* createIterator(TREE* t);
 NODE* treeMin(NODE* r);
 NODE* treeMax(NODE* r);
 NODE* getNode(TREE* t, int key);
-void deleteNode(TREE* t, NODE* z);
+void deleteNode(TREE* t, NODE** z);
