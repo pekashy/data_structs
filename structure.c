@@ -7,6 +7,7 @@ void freeNode(NODE* n){
 
 NODE* getNode(TREE* t, int key){
     NODE* n=t->root;
+    if(!n->key) return NULL;
     while(n->key->key!=key){
         if(n->key->key > key) {
             if(n->left){
@@ -56,9 +57,11 @@ NODE* createNode(){
 
 TREE* createTree(){
     TREE *t=malloc(sizeof(TREE));
-    if(!t) return NULL;
+    if(!t)
+        return NULL;
     t->root=createNode();
-    if(!t->root) return NULL; //not enough memory
+    if(!t->root)
+        return NULL; //not enough memory
     t->root->parent=NULL;
     return t;
 }
@@ -114,7 +117,8 @@ NODE* treeInsert(TREE* t, NODE* z){
 
 KEY* createKey(int k){
     KEY* key=malloc(sizeof(KEY));
-    if(!key) return NULL;
+    if(!key)
+        return NULL;
     key->n=1;
     key->key=k;
     return key;
@@ -122,9 +126,11 @@ KEY* createKey(int k){
 
 NODE* addNode(TREE* t, int k){
     NODE* n=createNode();
-    if(!n) return NULL;
+    if(!n)
+        return NULL;
     KEY* key =createKey(k);
-    if(!key) return NULL;
+    if(!key)
+        return NULL;
     n->key=key;
     return treeInsert(t, n);
 }
@@ -142,12 +148,14 @@ NODE* nextElement(NODE* x){
 
 void next(I* i){
     i->current=(nextElement(i->current));
-    if(!i->current) i->isLast=1;
+    if(!i->current)
+        i->isLast=1;
 }
 
 I* createIterator(TREE* t){
     I* i=malloc(sizeof(I));
-    if(!i) return NULL;
+    if(!i)
+        return NULL;
     i->t=t;
     i->current=treeMin(t->root);
     i->next=&next;
@@ -157,9 +165,11 @@ I* createIterator(TREE* t){
 
 void deleteNode(TREE* t, NODE* z){
     NODE *x, *y;
+    if(!z) return;
     if(!z->left || !z->right)
         y=z;
-    else y=nextElement(z);
+    else
+        y=nextElement(z);
     if(y->left)
         x=y->left;
     else
