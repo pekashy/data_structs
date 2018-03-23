@@ -21,7 +21,8 @@ void freeNode(NODE** n){
 
 NODE* getNode(TREE* t, int key){
     NODE* n=t->root;
-    if(!n->key) return NULL;
+    if(!n->key)
+        return NULL;
     while(n->key->key!=key){
         if(n->key->key > key) {
             if(n->left){
@@ -83,14 +84,16 @@ TREE* createTree(){
     if(!t)
         return NULL;
     t->root=createNode();
-    if(!t->root)
-        return NULL; //not enough memory
+    if(!t->root){
+        free(t);
+        return NULL;
+    } //not enough memory
     t->root->parent=NULL;
     return t;
 }
 
 NODE* treeInsert(TREE* t, NODE* z){
-    NODE* x=t->root;
+    NODE* x=t->root; //always present
     while(!x->isLeaf){
         if(x->left) {
             if (z->key->key < x->key->key){
@@ -145,21 +148,36 @@ KEY* createKey(int k){
     key->n=1;
     key->key=k;
     key->data=malloc(64000); //data
-    if(!key->data)
+    if(!key->data){
+        free(key);
         return NULL;
+    }
     memset(key->data, '1', 64000);
     return key;
 }
 
 NODE* addNode(TREE* t, int k){
-    NODE* n=createNode();
-    if(!n)
+    if(!t)
+        return NULL;
+    if(!t->root)
         return NULL;
     KEY* key =createKey(k);
-    if(!key)
+    if(!key){
         return NULL;
+    }
+    NODE *n = createNode();
+    if(!n) {
+        free(key);
+        return(NULL);
+    }
     n->key=key;
-    return treeInsert(t, n);
+    NODE* ins=treeInsert(t, n);
+    if(!ins){
+        freeNode(&n);
+        return NULL;
+    }
+    else
+        return ins;
 }
 
 NODE* nextElement(NODE* x){
