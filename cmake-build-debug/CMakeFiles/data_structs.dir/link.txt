@@ -1,1 +1,0 @@
-/usr/bin/cc -g   CMakeFiles/data_structs.dir/test.c.o CMakeFiles/data_structs.dir/structure.c.o  -o data_structs 

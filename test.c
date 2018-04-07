@@ -1,10 +1,10 @@
 #include "structure.h"
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <zconf.h>
 
 
 void test() {
-    // printf("%li", result);
     int a = 1000;
     int b = 200;
     TREE *tree = createTree();
@@ -17,8 +17,9 @@ void test() {
     treeMax(tree->root);
     treeMin(tree->root);
 
-
     I *iterator31 = createIterator(tree3);
+    iterator31->current=NULL;
+    iterator31->next(iterator31);
     NODE *dnode = getNode(tree3, 1);
     treeMax(tree3->root);
     treeMin(tree3->root);
@@ -35,6 +36,7 @@ void test() {
     for (int i = 0; i < a; i++) {
         if (!addNode(tree, rand() % (b + 1 - 1) + 1)) {
             createTree();
+            createIterator(tree);
             continue;
         }
         if (!addNode(tree2, i))
@@ -59,29 +61,12 @@ void test() {
         iterator23->next(iterator23);
         free(iterator23);
     }
-    /* iterator->current=getNode(tree, 1500);
-     while (!iterator->isLast) {
-         iterator->next(iterator);
-     }
-     iterator->current=getNode(tree, treeMin(tree)->key->key);
-     iterator->isLast=0;*/
     I *iterator2 = createIterator(tree2);
-    //I *iterator5 = createIterator(tree2);
-
     NODE *del, *del2;
     treeMax(tree->root);
     treeMin(tree->root);
     treeMax(tree2->root);
     treeMin(tree2->root);
-    //deleteNode(tree, &tree->root);
-    //deleteNode(tree2, tree2->root);
-
-
-    /* while (!iterator->isLast) {
-         del=iterator->current;
-         iterator->next(iterator);
-         deleteNode(tree, del);
-     }*/
     for (int k = 1; k < b; k++) {
         dnode = getNode(tree4, 1);
         deleteNode(tree4, &dnode);
@@ -95,12 +80,6 @@ void test() {
             deleteNode(tree, &del);
         }
     }
-    else{
-        for (int k = 1; k < b; k++) {
-            dnode = getNode(tree, 1);
-            deleteNode(tree, &dnode);
-        }
-    }
     if (iterator2){
         while (!iterator2->isLast) {
             del2 = iterator2->current;
@@ -108,14 +87,10 @@ void test() {
             deleteNode(tree2, &del2);
         }
     }
-    else{
-        for (int k = 1; k < b; k++) {
-            dnode = getNode(tree2, 1);
-            deleteNode(tree2, &dnode);
-        }
-    }
     free(iterator);
     free(iterator2);
+    tree->root=NULL;
+    addNode(tree, 1);
     free(tree);
     free(tree2);
     free(tree5);
@@ -123,9 +98,9 @@ void test() {
 
 
 int main() {
-
+    addNode(NULL, 1);
     test();
-
+    printf("%d", sizeof(TREE));
     struct rlimit rl;
     getrlimit (RLIMIT_AS, &rl);
     printf("\n Default value is : %lld\n", (long long int)rl.rlim_cur);
@@ -134,6 +109,15 @@ int main() {
     setrlimit (RLIMIT_AS, &rl);
     getrlimit (RLIMIT_AS, &rl);
     printf("\n Default value now is : %lld\n", (long long int)rl.rlim_cur);
-
     test();
+    rl.rlim_cur = 8;
+    rl.rlim_max = 8;
+    setrlimit (RLIMIT_AS, &rl);
+    getrlimit (RLIMIT_AS, &rl);
+    printf("\n Default value now is : %lld\n", (long long int)rl.rlim_cur);
+    if(fork()){
+        TREE *tree10 = createTree();
+        free(tree10);
+    }
+
 }
